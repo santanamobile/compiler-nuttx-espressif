@@ -89,8 +89,4 @@ RUN echo "export PATH=$PATH:/opt/xpack-riscv-none-elf-gcc-13.2.0-2/bin:/opt/xten
 
 WORKDIR ${WORK}
 
-# Copy script to download nuttx sources
-COPY get-nuttx.sh .
-RUN sudo chmod 0755 get-nuttx.sh
-
 ENTRYPOINT ["/bin/bash"]
