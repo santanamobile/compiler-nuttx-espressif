@@ -51,23 +51,31 @@ REPOSITORY                 TAG       IMAGE ID       CREATED          SIZE
 compiler-nuttx-espressif   v1.0      2080a0f050c0   xx seconds ago   4.79GB
 ```
 
-## Run container
+## How to use
 
-To build (and flash) the firmware image on the board, you must connect the board on the machine before start the container.
+Choose an empty folder on your machine and run the container.
+
+If you want build (and flash) the firmware image on the board, you must connect the board on the machine before start the container.
 
 ```bash
-docker run --rm -it --privileged --device=/dev/ttyUSB0 -v "${PWD}/project:/project" compiler-nuttx-espressif:v1.0
+mkdir ~/some-empty-folder
+cd ~/some-empty-folder
 ```
 
-## Getting NuttX Sources
+Download the Nuttx files.
 
 ```bash
-cd /project
 git clone https://github.com/apache/nuttx.git nuttx
 git clone https://github.com/apache/nuttx-apps apps
 ```
 
-## Build Example
+This step may be done inside the container as well, in this case you must change to /project folder.
+
+Run the container.
+
+```bash
+docker run --rm -it --privileged --device=/dev/ttyUSB0 -v "${PWD}/project" compiler-nuttx-espressif:v1.0
+```
 
 NuttX provides ready-to-use board default configurations that enable the required config (from Kconfig) for a use scenario, in this case i'll use the example of nsh for the board franzininho-wifi.
 
@@ -76,6 +84,8 @@ First of all, we have to ensure that no previous config exists.
 ```bash
 make distclean
 ```
+
+Configure nuttx to generate a .config file for franzininho-wifi.
 
 ```bash
 ./tools/configure.sh franzininho-wifi:nsh
@@ -87,7 +97,7 @@ Before building and flashing the firmware, it is necessary build the bootloader.
 make bootloader
 ```
 
-Flash firmware image with this command:
+Build and flash firmware image with this command:
 
 ```bash
 make flash ESPTOOL_PORT=/dev/ttyUSB0 ESPTOOL_BINDIR=./
